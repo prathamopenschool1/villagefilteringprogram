@@ -1,0 +1,6 @@
+[Desktop Entry]
+version=1.0
+Name = PKAPP
+Exec = /home/pi/systemconfig/villagefilteringprogram/PKAPP.py
+Icon = /home/pi/systemconfig/villagefilteringprogram/logo.jpg
+Type = Application
