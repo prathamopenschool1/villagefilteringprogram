@@ -7,8 +7,8 @@ import requests
 import json
 from tkinter import messagebox
 from collections import OrderedDict
-# import csv
-# import pandas as pd
+import csv
+import pandas as pd
 
 
 class LiveCall(object):
@@ -103,20 +103,20 @@ class LiveCall(object):
 
         response_crl = requests.request("GET", self.crl_url, headers=self.headers, params=querystring)
         res_crl = json.loads(response_crl.content.decode("utf-8"))
-        # global users_list, passwords_list
-        # users_list = []
-        # passwords_list = []
-        # for k in res_crl:
-        #     users_list.append(k['UserName'])
-        #     passwords_list.append(k['Password'])
+        global users_list, passwords_list
+        users_list = []
+        passwords_list = []
+        for k in res_crl:
+            users_list.append(k['UserName'])
+            passwords_list.append(k['Password'])
 
         # rows = zip(users_list, passwords_list)
         # with open('/home/pi/superusers.csv', "w") as out:
         #     writer = csv.writer(out)
         #     for row in rows:
         #         writer.writerow(row)
-        # pd.DataFrame(list(zip(users_list, passwords_list))).to_csv('/home/pi/output.csv',
-        #                                                            header=False, index=False)
+        pd.DataFrame(list(zip(users_list, passwords_list))).to_csv('/home/pi/output.csv',
+                                                                   header=False, index=False)
         table_name = "Crl"
         filter_name = "programid:" + self.programid + ",state:" + self.state
 
@@ -322,27 +322,27 @@ class LiveCall(object):
             except Exception as e:
                 messagebox.showinfo("PKAPP", "Problem occurred while loading please check internet connection")
 
-        # for i in villages_to_post:
-        #     i = i["VillageId"]
-        #     learner = "http://www.devtab.openiscool.org/api/CoachYouth/?programid=%s&villageId=%s" % (self.programid, i)
-        #     querystring1 = {"programid": self.programid, "villageid": i}
-        #     response_learner = requests.request("GET", learner, headers=self.headers, params=querystring1)
-        #     res_learner = json.loads(response_learner.content.decode("utf-8"))
-        #     # pprint(res_learner)
-        #     global users1_list, passwords1_list, full_Name
-        #     users1_list = []
-        #     passwords1_list = []
-        #     full_Name = []
-        #     for k in res_learner:
-        #         users1_list.append(k['UserName'])
-        #         passwords1_list.append(k['Password'])
-        #         full_Name.append(k['CoachName'])
-        #
-        #     # rows = zip(full_Name, users1_list, passwords1_list)
-        #     # with open('/home/pi/learners.csv', "w") as out:
-        #     #     writer = csv.writer(out)
-        #     #     for row in rows:
-        #     #         writer.writerow(row)
-        #
-        #     pd.DataFrame(list(zip(full_Name, users1_list, passwords1_list))).to_csv('/home/pi/learners.csv',
-        #                                                                             header=False, index=False)
+        for i in villages_to_post:
+            i = i["VillageId"]
+            learner = "http://www.devtab.openiscool.org/api/CoachYouth/?programid=%s&villageId=%s" % (self.programid, i)
+            querystring1 = {"programid": self.programid, "villageid": i}
+            response_learner = requests.request("GET", learner, headers=self.headers, params=querystring1)
+            res_learner = json.loads(response_learner.content.decode("utf-8"))
+            # pprint(res_learner)
+            global users1_list, passwords1_list, full_Name
+            users1_list = []
+            passwords1_list = []
+            full_Name = []
+            for k in res_learner:
+                users1_list.append(k['UserName'])
+                passwords1_list.append(k['Password'])
+                full_Name.append(k['CoachName'])
+
+            # rows = zip(full_Name, users1_list, passwords1_list)
+            # with open('/home/pi/learners.csv', "w") as out:
+            #     writer = csv.writer(out)
+            #     for row in rows:
+            #         writer.writerow(row)
+
+            pd.DataFrame(list(zip(full_Name, users1_list, passwords1_list))).to_csv('/home/pi/learners.csv',
+                                                                                    header=False, index=False)
