@@ -140,6 +140,7 @@ def backup():
                                 # /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup
                                 
                         except Exception as e1:
+                            print(e1)
                             return False
                 else:
                     os.makedirs("/opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup/DesktopBackup")
@@ -161,12 +162,15 @@ def backup():
                                 # /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup
                                 
                         except Exception as e1:
+                            print(e1)
                             return False
 
             except Exception as e:
+                print(e)
                 return False
 
         except Exception as e:
+            print(e)
             return False
 
         if content_result['next'] is None:
