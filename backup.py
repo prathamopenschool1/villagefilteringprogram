@@ -6,6 +6,7 @@ import json
 import os
 import random
 import string
+from pprint import pprint
 from tkinter import messagebox
 
 import requests
@@ -13,7 +14,7 @@ import requests
 
 def backup():
 
-    global i
+    global i, serial_line, res_device
     i = 1
     n = 6
     randstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(n))
@@ -33,6 +34,7 @@ def backup():
 
         # loading response in json format in lstscore variable
         lstscore = json.loads(response.content.decode('utf-8'))
+        pprint(lstscore)
         
         headers = {
             'cache-control': "no-cache",
@@ -58,7 +60,7 @@ def backup():
         # content info
         content_response = requests.request("GET", content_url, headers=headers, auth=auth)
         content_result = json.loads(content_response.content.decode("utf-8"))
-        #pprint(content_result)
+        pprint(content_result)
 
         #print(content_result['next'])
         try:
@@ -73,6 +75,7 @@ def backup():
             # facility info
             facility_response = requests.request("GET", facility_url, headers=headers, auth=auth)
             facility_result = json.loads(facility_response.content.decode("utf-8"))
+            pprint(facility_result)
 
             for values in facility_result:
                 values["is_superuser"] = ""
@@ -84,6 +87,7 @@ def backup():
             # channel info
             response_channel = requests.request("GET", channel_url, headers=headers, auth=auth)
             res_channel = json.loads(response_channel.content.decode("utf-8"))
+            pprint(res_channel)
 
             global new_channel_value
             new_channel_value = []
@@ -118,7 +122,7 @@ def backup():
                 "serial_id": serial_line
             }
             
-            # print(desktop_data_to_post, "dd")
+            print(desktop_data_to_post, "dd")
 
             try:
                 if os.path.isdir("/opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup/DesktopBackup"):
@@ -126,8 +130,8 @@ def backup():
                                            "desk"+randstr + str(datetime.datetime.now()) + '.json'),
                               "w") as outfile:
                         json.dump(desktop_data_to_post, outfile, indent=4, sort_keys=True)
-                    # print(response_post.status_code, response_post.reason)
-                    # pprint(desktop_data_to_post)
+                    print(response.status_code, response.reason)
+                    pprint(desktop_data_to_post)
                     if response.status_code == 404:
                         return True
                     
@@ -140,6 +144,7 @@ def backup():
                                 # /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup
                                 
                         except Exception as e1:
+                            messagebox.showinfo("pratham", e1)
                             print(e1)
                             return False
                 else:
@@ -148,8 +153,8 @@ def backup():
                                            "desk"+randstr + str(datetime.datetime.now()) + '.json'),
                               "w") as outfile:
                         json.dump(desktop_data_to_post, outfile, indent=4, sort_keys=True)
-                    # print(response_post.status_code, response_post.reason)
-                    # pprint(desktop_data_to_post)
+                    print(response.status_code, response.reason)
+                    pprint(desktop_data_to_post)
                     if response.status_code == 404:
                         return True
                     
@@ -162,14 +167,17 @@ def backup():
                                 # /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup
                                 
                         except Exception as e1:
+                            messagebox.showinfo("pratham", e1)
                             print(e1)
                             return False
 
             except Exception as e:
+                messagebox.showinfo("pratham", e)
                 print(e)
                 return False
 
         except Exception as e:
+            messagebox.showinfo("pratham", e)
             print(e)
             return False
 
