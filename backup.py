@@ -124,6 +124,7 @@ def backup():
             
             print(desktop_data_to_post, "dd")
 
+            os.system('sudo chmod 777 -R /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup/')
             try:
                 if os.path.isdir("/opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup/DesktopBackup"):
                     with open(os.path.join("/opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup/DesktopBackup",
