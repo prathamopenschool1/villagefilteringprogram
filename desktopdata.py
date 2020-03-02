@@ -4,14 +4,15 @@
 from pprint import pprint
 import os
 from tkinter import messagebox
-
+from pathlib import Path
 import requests
 import json
 
 
 def get_new_data():
 
-    global i, serial_line
+    global i, serial_line, homeDir
+    homeDir = str(Path.home())
     serial_line = ''
     i = 1
 
@@ -85,12 +86,12 @@ def get_new_data():
             res_device = json.loads(response_device.content.decode("utf-8"))
 
             # pi id data to be collected
-            os.system('cat /proc/cpuinfo > serial_data.txt')
-            serial_file = open('serial_data.txt', "r+")
-            for line in serial_file:
-                if line.startswith('Serial'):
-                    serial_line = line
-
+            # os.system('cat /proc/net/arp > serial_data.txt')
+            # serial_file = open('serial_data.txt', "r+")
+            # for line in serial_file:
+            #     if line.startswith('Serial'):
+            #         serial_line = line
+            #
             # print(serial_line)
 
             # desktop score data to be posted
@@ -99,7 +100,7 @@ def get_new_data():
                 "facility_info": facility_result,
                 "device_info": res_device,
                 "pi_session_info": new_data,
-                "serial_id": serial_line
+                # "serial_id": serial_line
             }
 
             try:
@@ -109,7 +110,7 @@ def get_new_data():
                     data=json.dumps(desktop_data_to_post),
                     auth=(username, password)
                 )
-                # print(response_post.status_code, response_post.reason)
+                print(response_post.status_code, response_post.reason)
                 # pprint(desktop_data_to_post)
 
             except Exception as e:

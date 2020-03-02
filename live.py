@@ -7,11 +7,16 @@ import requests
 import json
 from tkinter import messagebox
 from collections import OrderedDict
+from pathlib import Path
 import csv
+import os
 import pandas as pd
 
 
 class LiveCall(object):
+
+    homeDir = str(Path.home())
+
     headers = {
         'cache-control': "no-cache",
         'content-type': "application/json",
@@ -115,7 +120,7 @@ class LiveCall(object):
         #     writer = csv.writer(out)
         #     for row in rows:
         #         writer.writerow(row)
-        pd.DataFrame(list(zip(users_list, passwords_list))).to_csv('/home/pi/output.csv',
+        pd.DataFrame(list(zip(users_list, passwords_list))).to_csv(os.path.join(self.homeDir, 'output.csv'),
                                                                    header=False, index=False)
         table_name = "Crl"
         filter_name = "programid:" + self.programid + ",state:" + self.state
@@ -220,6 +225,9 @@ class LiveCall(object):
             for vn in av:
                 if vn1 == vn['VillageName']:
                     villages_to_post.append(vn)
+                    print(villages_to_post, 'vp')
+
+        print(villages_to_post, 'vp1')
 
         table_name = "village"
         filter_name = "programid:" + self.programid + ",state:" + self.state
@@ -344,5 +352,6 @@ class LiveCall(object):
             #     for row in rows:
             #         writer.writerow(row)
 
-            pd.DataFrame(list(zip(full_Name, users1_list, passwords1_list))).to_csv('/home/pi/learners.csv',
+            pd.DataFrame(list(zip(full_Name, users1_list, passwords1_list))).to_csv(os.path.join(self.homeDir,
+                                                                                                 'learners.csv'),
                                                                                     header=False, index=False)

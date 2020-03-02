@@ -91,10 +91,11 @@ class StartPage(tk.Frame):
         def desktop_data():
             check_internet()
             retdeskdata = get_new_data()
-            if retdeskdata:
-                messagebox.showinfo("pratham", "data post completed!")
-            else:
-                messagebox.showinfo("pratham", "some problem occurred!")
+            try:
+                if retdeskdata:
+                    messagebox.showinfo("pratham", "data post completed!")
+            except Exception as e:
+                messagebox.showinfo("pratham", e)
 
         pull = ttk.Button(self, text="PULL DATA", command=look_internet, width=12)
         pull.grid(sticky="W", row=5, column=0, padx=2, pady=120)
@@ -273,7 +274,7 @@ class ProgramState(tk.Frame):
                 if value.get() > 0:
                     self.send_village.append(key)
 
-            # print(self.var)
+            # print(str(self.var), 'll')
             self.getstates()
             c.postvillage(p=str(self.programlist[self.program.get()]),
                           s=self.stateList[self.states.get()], b=self.blocks.get(),

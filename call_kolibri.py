@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from pprint import pprint
 from tkinter import messagebox
+from pathlib import Path
 import requests
 import json
 import os
@@ -12,7 +13,9 @@ import random
 
 def call_kolbri():
 
-    global res_del, i, serial_line
+    global res_del, i, serial_line, homeDir
+    homeDir = str(Path.home())
+    homeDir = os.path.join(homeDir, 'generate/Backup')
     i = 1
     n = 6
     serial_line = ''
@@ -40,13 +43,13 @@ def call_kolbri():
         # pprint(lstscore)
 
         # pi id data to be collected
-        os.system('cat /proc/cpuinfo > serial_data.txt')
-        serial_file = open('serial_data.txt', "r+")
-        for line in serial_file:
-            if line.startswith('Serial'):
-                serial_line = line
-
-        lstscore['serial_id'] = serial_line
+        # os.system('cat /proc/cpuinfo > serial_data.txt')
+        # serial_file = open('serial_data.txt', "r+")
+        # for line in serial_file:
+        #     if line.startswith('Serial'):
+        #         serial_line = line
+        #
+        # lstscore['serial_id'] = serial_line
 
         # checks the value of count
         if lstscore['count'] == 0:
@@ -81,15 +84,17 @@ def call_kolbri():
                             # messagebox.showinfo("pratham", e)
 
                     try:
-                        with open(os.path.join("/opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup",
-                                               randstr + str(datetime.datetime.now()) + '.json'),
-                                  "w") as outfile:
-                            json.dump(lstscore, outfile, indent=4, sort_keys=True)
-                            # /opt/PIHDD/KOLIBRI_DATA/content/storage/pdata/Backup
+                        if not os.path.exists(homeDir):
+                            os.makedirs(homeDir)
+                            with open(os.path.join(homeDir, randstr + str(datetime.datetime.now()) + '.json'),
+                                      "w") as outfile:
+                                json.dump(lstscore, outfile, indent=4, sort_keys=True)
+                        else:
+                            with open(os.path.join(homeDir, randstr + str(datetime.datetime.now()) + '.json'),
+                                      "w") as outfile:
+                                json.dump(lstscore, outfile, indent=4, sort_keys=True)
                     except Exception as e2:
                         messagebox.showinfo("pratham", e2)
-
-
 
                 else:
                     return False
