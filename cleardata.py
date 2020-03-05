@@ -15,7 +15,7 @@ def clear_data():
     messagebox.showinfo("pratham", "deleting data please wait")
     while True:
         # get request api with pagination
-        urls = "http://localhost:8000/pratham/datastore/?page=1&page_size=15"
+        urls = "http://localhost:8080/pratham/datastore/?page=1&page_size=15"
 
         # localhost authentication parameters
         username = 'pratham'
@@ -35,7 +35,7 @@ def clear_data():
             try:
                 for obj in lstscore['results']:
                     show_id = obj['id']
-                    url_del = "http://localhost:8000/pratham/datastore/" + show_id
+                    url_del = "http://localhost:8080/pratham/datastore/" + show_id
                     try:
                         res_del = requests.delete(url_del, headers=headers, auth=(username, password))
                     except Exception as e:
